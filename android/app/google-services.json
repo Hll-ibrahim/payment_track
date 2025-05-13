@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "806258245388",
+    "project_id": "payment-track-8583f",
+    "storage_bucket": "payment-track-8583f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806258245388:android:0af922a053449ca5359329",
+        "android_client_info": {
+          "package_name": "com.example.payment_track"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlD_mGf1XJERZ07eoQW2kFt51c_boX6s4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
