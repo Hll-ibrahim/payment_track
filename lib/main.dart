@@ -47,15 +47,38 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     _amountController.clear();
   }
 
+  Future<void> _deleteExpense(String docId,String title) async {
+    bool? shouldDelete = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Silme Onayı"),
+        content: Text("“$title” harcamasını silmek istediğinize emin misiniz?"),
+        actions: [
+          TextButton(
+            child: Text("İptal"),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: Text("Evet", style: TextStyle(color: Colors.red)),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      await FirebaseFirestore.instance.collection('expenses').doc(docId).delete();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Herkese Açık Harcamalar")),
+      appBar: AppBar(title: Text("Harcamalar")),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            // Giriş alanları
             TextField(
               controller: _titleController,
               decoration: InputDecoration(labelText: 'Başlık'),
@@ -71,7 +94,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               child: Text('Harcamayı Ekle'),
             ),
             Divider(),
-            // Liste
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -89,9 +111,15 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   return ListView(
                     children: snapshot.data!.docs.map((doc) {
                       final data = doc.data() as Map<String, dynamic>;
+                      final docId = doc.id;
                       return ListTile(
                         title: Text(data['title']),
                         subtitle: Text('${data['amount']} ₺'),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete_outline),
+                          color: Colors.grey[700],
+                          onPressed: () => _deleteExpense(docId,data['title']),
+                        ),
                       );
                     }).toList(),
                   );
